@@ -14,7 +14,7 @@ public class Task {
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID id;
-    private UUID owner;
+    private UUID ownerId;
     @Column(length = 50, nullable = false)
     private String title;
     private String description;
