@@ -20,7 +20,7 @@ public class Task {
     private String description;
     @CreationTimestamp
     private LocalDateTime creationDateTime;
-    private LocalDateTime startDateTime = creationDateTime;
+    private LocalDateTime startDateTime = LocalDateTime.now();
     private LocalDateTime updateDateTime;
     private LocalDateTime endingDateTime;
     private boolean isCompleted = false;
