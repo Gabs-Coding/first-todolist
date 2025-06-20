@@ -5,6 +5,7 @@ import coding.gabs.todolist.exception.InvalidCredentials;
 import coding.gabs.todolist.exception.UserNotAuthenticated;
 import coding.gabs.todolist.exception.UserNotFound;
 import coding.gabs.todolist.service.UserService;
+import coding.gabs.todolist.util.FilterErrorResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,12 +39,12 @@ public class FilterTaskAuth extends OncePerRequestFilter {
             user = userService.validateUserCredentials(userCredentials.getUsername(),
                     userCredentials.getPassword());
         } catch (RuntimeException e) {
-            int statusCode = getStatusCodeByException(e);
-            String message = getMessage(e);
-            response.setStatus(statusCode);
-            response.setContentType("application/json");
-            response.getWriter()
-                    .write("{ \"statusCode\": \"" + statusCode + "\",\n \"errorMessage\": \"" + message + "\"}");
+            int status = getStatusCodeByException(e);
+            FilterErrorResponse.write(
+                    response,
+                    status,
+                    e.getMessage(),
+                    request.getRequestURI());
             return;
         }
 
@@ -83,7 +84,7 @@ public class FilterTaskAuth extends OncePerRequestFilter {
         Optional<String> authFound = Optional.ofNullable(rawAuthFromRequest);
 
         if (authFound.isEmpty()) {
-            return new LoginInfo(null, null);
+            return new LoginInfo("foo", "bar");
         }
 
         String usernameAndPasswordLiterals = rawAuthFromRequest.substring(rawAuthFromRequest.indexOf(" ") + 1);
