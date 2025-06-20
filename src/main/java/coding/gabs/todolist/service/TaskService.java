@@ -23,7 +23,7 @@ public class TaskService {
 
         LocalDateTime currentDate = LocalDateTime.now();
 
-        if (currentDate.isBefore(task.getStartDateTime()) ||
+        if (currentDate.isAfter(task.getStartDateTime()) ||
             currentDate.isAfter(task.getEndingDateTime())) {
             throw new InvalidLocalDateTime("The start date of the task shouldn't be before the current date.");
         }
