@@ -23,6 +23,7 @@ public class Task {
     private LocalDateTime startDateTime;
     private LocalDateTime updateDateTime;
     private LocalDateTime endingDateTime;
+    private boolean isCompleted = false;
     @Enumerated(EnumType.STRING)
     private Priority priority;
 }
