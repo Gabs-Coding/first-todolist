@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -28,5 +29,10 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserByUsername(@PathVariable UUID id) {
         return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getUsers());
     }
 }
