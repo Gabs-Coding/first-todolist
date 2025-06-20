@@ -39,9 +39,11 @@ public class FilterTaskAuth extends OncePerRequestFilter {
                     userCredentials.getPassword());
         } catch (RuntimeException e) {
             int statusCode = getStatusCodeByException(e);
+            String message = getMessage(e);
             response.setStatus(statusCode);
             response.setContentType("application/json");
-            response.getWriter().write("{\"statusCode\": \"" + statusCode + "\",\n\"error\": \"Missing Authorization header\"}");
+            response.getWriter()
+                    .write("{ \"statusCode\": \"" + statusCode + "\",\n \"errorMessage\": \"" + message + "\"}");
             return;
         }
 
@@ -62,6 +64,17 @@ public class FilterTaskAuth extends OncePerRequestFilter {
         return statusCode;
     }
 
+    public String getMessage(RuntimeException e) {
+        String message;
+        switch (e) {
+            case UserNotFound ignored -> message = "User not found";
+            case InvalidCredentials ignored -> message = "User not authorized";
+            case UserNotAuthenticated ignored -> message = "User not authenticated";
+            default -> message = e.getMessage();
+        }
+        return message;
+    }
+
     // I'm almost sure that this isn't a secure method. The user password is exposed,
     // and I'm not sure what to do for fix it. I'll search how to deal better with
     // it. TODO: search a batter way to validate the user password.
@@ -70,7 +83,7 @@ public class FilterTaskAuth extends OncePerRequestFilter {
         Optional<String> authFound = Optional.ofNullable(rawAuthFromRequest);
 
         if (authFound.isEmpty()) {
-            throw new UserNotAuthenticated("Missing authentication header.");
+            return new LoginInfo(null, null);
         }
 
         String usernameAndPasswordLiterals = rawAuthFromRequest.substring(rawAuthFromRequest.indexOf(" ") + 1);
