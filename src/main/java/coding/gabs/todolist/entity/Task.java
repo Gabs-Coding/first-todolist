@@ -3,7 +3,6 @@ package coding.gabs.todolist.entity;
 import coding.gabs.todolist.entity.enums.Priority;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
