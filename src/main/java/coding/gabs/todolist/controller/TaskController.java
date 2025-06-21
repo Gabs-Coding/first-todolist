@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/task")
@@ -31,4 +32,8 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getTasksFromActiveUser(request));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Task> update(@RequestBody Task task, HttpServletRequest request, @PathVariable UUID id) {
+        return ResponseEntity.ok(taskService.update(task, request, id));
+    }
 }
